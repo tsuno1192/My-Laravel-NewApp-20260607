@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Part;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use App\Services\GoogleSheetsService;
+
+class PartController extends Controller
+{
+    protected $sheets;
+
+    public function __construct(GoogleSheetsService $sheets)
+    {
+        $this->sheets = $sheets;
+    }
+
+    public function indexSheet()
+    {
+        $spreadsheetId = '1qMs9WFtvD_a_6w7NNZUMxaOm6gmI0VybZ-l1SvszwB0'; 
+        $range = 'シート1!A1:D10';
+        $parts = $this->sheets->readSheet($spreadsheetId, $range);
+        return view('parts.index', compact('parts'));
+    }
+
+    public function store(Request $request)
+    {
+        $rawContent = $request->getContent();
+        $outerData = json_decode($rawContent, true);
+        $contentString = $outerData['content'] ?? $rawContent;
+        $partData = json_decode($contentString, true) ?? [];
+
+        if (empty($partData['id']) || empty($partData['part_name']) || empty($partData['factory_name'])) {
+            return response()->json(['status' => 'error', 'message' => '必須項目不足'], 422);
+        }
+
+        $partData['created_at'] = now(); 
+
+        if (!empty($partData['file_path']) && filter_var($partData['file_path'], FILTER_VALIDATE_URL)) {
+            $url = $partData['file_path'];
+            $fileName = 'parts/' . $partData['id'] . '_' . Str::random(6) . '.pdf';
+            $response = Http::get($url);
+            if ($response->successful()) {
+                Storage::disk('public')->put($fileName, $response->body());
+                $partData['file_path'] = $fileName;
+            }
+        }
+
+        $part = Part::updateOrCreate(['id' => $partData['id']], $partData);
+        return response()->json(['status' => 'success', 'data' => $part], 201);
+    }
+
+    public function destroy(Request $request)
+    {
+        $id = $request->input('id');
+        $part = Part::where('id', $id)->first();
+        if ($part) {
+            if ($part->file_path) Storage::disk('public')->delete($part->file_path);
+            $part->delete();
+            return response()->json(['message' => '部品を削除しました'], 200);
+        }
+        return response()->json(['message' => '対象が見つかりません'], 404);
+    }
+}

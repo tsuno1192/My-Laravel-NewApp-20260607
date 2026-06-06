@@ -1,0 +1,13 @@
+POST http://localhost/api/books
+Content-Type: application/json
+
+{
+  "id": "test-uuid-0001",
+  "factory_name": "工場A",
+  "facility_name": "設備a",
+  "book_title": "コンプレッサー取扱説明書",
+  "book_number": "MAN-CP-01",
+  "category": "取扱説明書",
+  "key_word": "エアー漏れ, 異音, メンテナンス",
+  "file_path": "storage/manuals/compressor_manual.pdf"
+}
