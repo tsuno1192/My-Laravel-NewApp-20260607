@@ -9,15 +9,15 @@
 <body class="bg-gray-100 p-8">
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-bold mb-6 text-gray-800">📚 図書管理台帳 一覧</h1>
-        <a href="{{ route('dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center">
-          ← ダッシュボードへ戻る
+        <a href="{{ route('dashboard') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+            ← ダッシュボードへ戻る
         </a>
 
-           //検索フォーム
+          <!--検索フォーム-->
            <div class="mb-6">
               <form action="{{ route('books.index') }}" method="GET" class="flex gap-2">
-                  <input type="text" name="q" value="{{ request('q') }}" 
-                         placeholder="図書名、設備名、キーワードで検索..." 
+                  <input type="text" name="q" value="{{ request('q') }}"
+                         placeholder="図書名、設備名、キーワードで検索..."
                          class="flex-grow p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                   <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                       検索

@@ -15,3 +15,16 @@
 
 
 
+
+artisan コマンド
+
+D:
+cd D:\My-Laravel-NewApp
+
+docker compose exec laravel.test bash
+
+
+php artisan
+
+php artisan --version
+

@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
-            
+
             <div class="flex justify-start px-4 sm:px-0">
                 <a href="{{ route('check_records.index') }}" class="inline-flex items-center px-5 py-3 bg-slate-800 hover:bg-slate-900 text-white rounded-md font-bold text-sm shadow-md gap-2 transition duration-150">
                     <span class="text-base">🛠️</span>
@@ -17,13 +17,13 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    
+
                     @if (session('status'))
                         <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 font-bold rounded shadow-sm">
                             {{ session('status') }}
                         </div>
                     @endif
-                    
+
                     <h3 class="text-lg font-bold mb-4">■ あなたの工場の管理設備一覧</h3>
 
                     @if($equipments->isEmpty())
@@ -97,7 +97,7 @@
                                                 @if($record->status === '異常あり')
                                                     <a href="{{ route('trouble_reports.create', [
                                                     'equipment_id' => $record->equipment_id,
-                                                    'check_record_id' => $record->id]) }}" 
+                                                    'check_record_id' => $record->id]) }}"
                                                        class="inline-block bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded font-bold text-xs shadow transition">
                                                         ⚠️ 補修依頼する
                                                     </a>
